@@ -1,0 +1,49 @@
+version: '3'
+services:
+  #backend
+  composer:
+    container_name: composer
+    image: composer:1.9.3
+    environment:
+      - COMPOSER_CACHE_DIR=/app/.cache/composer
+    volumes:
+      - ./backend:/app
+    #restart: never
+  php:
+    container_name: php
+    image: php:7.4-cli
+    #restart: never
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+  fpm:
+    container_name: fpm
+    image: php:7.4-fpm
+    restart: always
+    volumes:
+      - ./backend:/app
+  nginx:
+    container_name: nginx
+    image: nginx:1.17.8-alpine
+    ports:
+      - 8080:80
+    volumes:
+      - ./backend:/app
+      - ./backend/var/log/nginx:/var/log/nginx
+      - ./backend/.conf/nginx/site.conf:/etc/nginx/conf.d/default.conf
+
+  #frontend
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - COMPOSE_CONVERT_WINDOWS_PATHS=1
+      - NODE_ENV=development
