@@ -54,8 +54,8 @@ localhost:3306
 ## Observações
 Algumas ações dentro do sistema possuem restrição a usuários. Por exemplo a adição de produtos ao carrinho. Portando deve-se fazer o login no sistema. Isso pode ser feito através da criação de um novo usuário (aba usuários) ou pode-se acessar com um usuário já criado. 
 Exemplo: 
-- E-mail: email
-- Senha: senha
+- E-mail: "email"
+- Senha: "senha"
 
 ## Imagens da aplicação
 ```
