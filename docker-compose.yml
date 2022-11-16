@@ -4,6 +4,9 @@ services:
   composer:
     container_name: composer
     image: composer:1.9.3
+    #build:
+    #  context: ./backend
+    #  dockerfile: DockerfileComposer
     environment:
       - COMPOSER_CACHE_DIR=/app/.cache/composer
     volumes:
@@ -12,13 +15,21 @@ services:
   php:
     container_name: php
     image: php:7.4-cli
+    #build:
+    #  context: ./backend
+    #  dockerfile: DockerfilePHP
     #restart: never
     volumes:
       - ./backend:/app
     working_dir: /app
+    depends_on:
+      - db
   fpm:
     container_name: fpm
-    image: php:7.4-fpm
+    #image: php:7.4-fpm
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     restart: always
     volumes:
       - ./backend:/app
@@ -31,6 +42,38 @@ services:
       - ./backend:/app
       - ./backend/var/log/nginx:/var/log/nginx
       - ./backend/.conf/nginx/site.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - db
+
+  #database
+  db:
+    container_name: db
+    image: mysql
+    restart: always
+    environment:
+        #MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+        #MYSQL_DATABASE: MY_DATABASE
+        #MYSQL_USER: MYSQL_USER
+        #MYSQL_PASSWORD: MYSQL_PASSWORD
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_PASSWORD: root
+        MYSQL_DATABASE: db
+    volumes:
+      - ./backend/.cache/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  #phpmyadmin
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8090:80'
+    restart: always
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
 
   #frontend
   frontend:

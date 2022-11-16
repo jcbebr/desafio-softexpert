@@ -12,6 +12,8 @@ COPY package.json ./
 COPY package-lock.json ./
 RUN npm install --silent
 RUN npm install react-scripts@3.4.1 -g --silent
+RUN npm install react-router-dom
+RUN npm install react-crud-table --save
 
 RUN mkdir -p node_modules/.cache && chmod -R 777 node_modules/.cache
 
