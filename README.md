@@ -56,3 +56,8 @@ Algumas ações dentro do sistema possuem restrição a usuários. Por exemplo a
 Exemplo: 
 - E-mail: email
 - Senha: senha
+
+## Imagens da aplicação
+```
+https://imgur.com/a/aHhTjo8
+```
